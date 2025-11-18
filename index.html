@@ -6,9 +6,6 @@
   <title>風格衣著 | Clothing Shop</title>
   <meta name="description" content="範例衣服店網站 — 展示商品、加入購物車、聯絡表單（單檔案範例）">
   <style>
-    /* -------------------------
-       Reset & 基本樣式
-       ------------------------- */
     :root{
       --max-width:1100px;
       --accent:#2b7a78;
@@ -36,10 +33,6 @@
       max-width:var(--max-width);
       margin:0 auto;
     }
-
-    /* -------------------------
-       Header / 導航
-       ------------------------- */
     header{
       display:flex;
       align-items:center;
@@ -85,10 +78,6 @@
     }
     .btn-primary{background:var(--accent);color:white}
     .btn-outline{background:transparent;border:1px solid #ddd}
-
-    /* -------------------------
-       Hero
-       ------------------------- */
     .hero{
       background:linear-gradient(90deg, rgba(43,122,120,0.06), rgba(255,122,89,0.03));
       padding:22px;
@@ -103,10 +92,6 @@
     .hero h1{margin:0 0 6px 0;font-size:26px}
     .hero p{margin:0;color:var(--muted)}
     .hero-right img{width:180px;border-radius:8px;box-shadow:var(--card-shadow)}
-
-    /* -------------------------
-       Layout: sidebar + products
-       ------------------------- */
     .main{
       display:grid;
       grid-template-columns:260px 1fr;
@@ -119,8 +104,6 @@
     .filter-group{margin-bottom:12px}
     .filter-group h4{margin:0 0 8px 0;font-size:14px}
     .price-range input{width:100%}
-
-    /* 商品格 */
     .products{
       display:grid;
       grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
@@ -135,8 +118,6 @@
     .meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
     .price{font-weight:700;color:var(--accent)}
     .card .card-actions{display:flex;gap:8px;margin-top:auto;align-items:center}
-
-    /* 購物車浮動按鈕 & 面板 */
     .cart-btn{
       position:fixed;
       right:22px;
@@ -164,11 +145,7 @@
     .cart-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed #eee}
     .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:6px}
     .cart-summary{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-
-    /* footer */
     footer{margin-top:20px;color:var(--muted);font-size:14px;text-align:center;padding:18px}
-
-    /* small screen */
     @media (max-width:880px){
       .main{grid-template-columns:1fr}
       .hero-right{display:none}
@@ -187,13 +164,11 @@
           <div style="font-size:12px;color:var(--muted)">簡約・日常・質感</div>
         </div>
       </a>
-
       <nav aria-label="主選單">
         <a href="#products">商品</a>
         <a href="#about">關於我們</a>
         <a href="#contact">聯絡</a>
       </nav>
-
       <div class="actions">
         <div class="search" role="search">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle></svg>
@@ -203,7 +178,6 @@
         <button class="btn btn-primary" id="signInBtn">登入</button>
       </div>
     </header>
-
     <section class="hero" aria-label="特色商品">
       <div class="hero-left">
         <h1>秋季新品上架 — 輕盈與溫暖兼具</h1>
@@ -214,11 +188,9 @@
         </div>
       </div>
       <div class="hero-right">
-        <!-- 使用 Picsum 作為示意圖，可換成真實商品圖 -->
-        <img src="https://picsum.photos/seed/fashion1/400/500" alt="店內新品示意">
+        <img src="https://images.unsplash.com/photo-1584466977773-1f7c66ff84c8?auto=format&fit=crop&w=400&q=80" alt="店內新品示意">
       </div>
     </section>
-
     <div class="main">
       <aside aria-label="篩選欄">
         <div class="filter-group">
@@ -228,7 +200,6 @@
           <label><input type="checkbox" class="cat" value="連身裙" checked> 連身裙</label><br/>
           <label><input type="checkbox" class="cat" value="褲裝" checked> 褲裝</label>
         </div>
-
         <div class="filter-group">
           <h4>價格範圍</h4>
           <div class="price-range">
@@ -238,7 +209,6 @@
             </div>
           </div>
         </div>
-
         <div class="filter-group">
           <h4>顏色</h4>
           <label><input type="checkbox" class="color" value="黑"> 黑</label><br/>
@@ -246,27 +216,20 @@
           <label><input type="checkbox" class="color" value="米"> 米</label><br/>
           <label><input type="checkbox" class="color" value="藍"> 藍</label>
         </div>
-
         <div style="margin-top:12px">
           <button id="clearFilters" class="btn btn-outline" style="width:100%">清除篩選</button>
         </div>
       </aside>
-
       <section>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
           <h2 id="products">商品</h2>
           <div style="color:var(--muted)"><span id="resultCount">0</span> 筆結果</div>
         </div>
-
-        <div class="products" id="productGrid" aria-live="polite">
-          <!-- 商品卡由 JavaScript 掛載 -->
-        </div>
-
+        <div class="products" id="productGrid" aria-live="polite"></div>
         <section id="about" style="margin-top:22px;background:white;padding:14px;border-radius:12px;box-shadow:var(--card-shadow)">
           <h3>關於我們</h3>
           <p style="color:var(--muted)">風格衣著成立於 2024 年，致力於提供平價但用心的服飾。我們關注材質、版型與實穿性。</p>
         </section>
-
         <section id="contact" style="margin-top:12px">
           <div style="background:white;padding:14px;border-radius:12px;box-shadow:var(--card-shadow);margin-top:12px">
             <h3>聯絡我們</h3>
@@ -285,20 +248,15 @@
             </form>
           </div>
         </section>
-
       </section>
     </div>
-
     <footer>
       © <span id="year"></span> 風格衣著 — 範例展示頁面。圖片為示意圖。
     </footer>
-
-    <!-- 購物車按鈕與面板 -->
     <div class="cart-btn" id="cartBtn" aria-label="購物車">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1" fill="white"/><circle cx="18" cy="20" r="1" fill="white"/></svg>
       <div id="cartCount">0</div>
     </div>
-
     <aside class="cart-panel" id="cartPanel" aria-label="購物車清單">
       <h3>購物車</h3>
       <div id="cartItems"></div>
@@ -311,25 +269,20 @@
         <button id="clearCart" class="btn btn-outline">清空</button>
       </div>
     </aside>
-
   </div>
 
   <script>
-    /* -------------------------
-       假商品資料（可改成從 API 取得）
-       ------------------------- */
     const products = [
-      {id:1,name:"舒適純棉T-Shirt",price:690,category:"T-Shirt",color:"白",img:"https://picsum.photos/seed/p1/600/400"},
-      {id:2,name:"經典牛仔外套",price:2580,category:"外套",color:"藍",img:"https://picsum.photos/seed/p2/600/400"},
-      {id:3,name:"高腰寬褲",price:980,category:"褲裝",color:"黑",img:"https://picsum.photos/seed/p3/600/400"},
-      {id:4,name:"輕薄風衣",price:1980,category:"外套",color:"米",img:"https://picsum.photos/seed/p4/600/400"},
-      {id:5,name:"夏日連身裙",price:1280,category:"連身裙",color:"白",img:"https://picsum.photos/seed/p5/600/400"},
-      {id:6,name:"印花短TEE",price:520,category:"T-Shirt",color:"黑",img:"https://picsum.photos/seed/p6/600/400"},
-      {id:7,name:"針織毛衣",price:1450,category:"外套",color:"藍",img:"https://picsum.photos/seed/p7/600/400"},
-      {id:8,name:"休閒運動褲",price:760,category:"褲裝",color:"黑",img:"https://picsum.photos/seed/p8/600/400"}
+      {id:1,name:"舒適純棉T-Shirt",price:690,category:"T-Shirt",color:"白",img:"https://images.unsplash.com/photo-1584466977773-1f7c66ff84c8?auto=format&fit=crop&w=600&q=80"},
+      {id:2,name:"經典牛仔外套",price:2580,category:"外套",color:"藍",img:"https://images.unsplash.com/photo-1593032465175-9042e3386f63?auto=format&fit=crop&w=600&q=80"},
+      {id:3,name:"高腰寬褲",price:980,category:"褲裝",color:"黑",img:"https://images.unsplash.com/photo-1628532470963-b88b44f72d5b?auto=format&fit=crop&w=600&q=80"},
+      {id:4,name:"輕薄風衣",price:1980,category:"外套",color:"米",img:"https://images.unsplash.com/photo-1593032465250-bfaee54f4304?auto=format&fit=crop&w=600&q=80"},
+      {id:5,name:"夏日連身裙",price:1280,category:"連身裙",color:"白",img:"https://images.unsplash.com/photo-1564468781199-3129a51b488c?auto=format&fit=crop&w=600&q=80"},
+      {id:6,name:"印花短TEE",price:520,category:"T-Shirt",color:"黑",img:"https://images.unsplash.com/photo-1600180758893-89b89cf26d80?auto=format&fit=crop&w=600&q=80"},
+      {id:7,name:"針織毛衣",price:1450,category:"外套",color:"藍",img:"https://images.unsplash.com/photo-1602810316315-8b5b35d5f988?auto=format&fit=crop&w=600&q=80"},
+      {id:8,name:"休閒運動褲",price:760,category:"褲裝",color:"黑",img:"https://images.unsplash.com/photo-1600180758951-ec6fc2baf62c?auto=format&fit=crop&w=600&q=80"}
     ];
 
-    // DOM references
     const productGrid = document.getElementById('productGrid');
     const resultCount = document.getElementById('resultCount');
     const searchInput = document.getElementById('searchInput');
@@ -343,231 +296,5 @@
     const clearFiltersBtn = document.getElementById('clearFilters');
     const toggleFiltersBtn = document.getElementById('toggleFilters');
     const yearEl = document.getElementById('year');
-
-    // 購物車資料結構（id -> 數量）
     const cart = {};
-
-    // 初始化
-    yearEl.textContent = new Date().getFullYear();
-    priceMaxLabel.textContent = `NT$${priceMax.value}`;
-
-    // Render 商品清單（根據篩選）
-    function renderProducts(){
-      const query = searchInput.value.trim().toLowerCase();
-      const selectedCats = Array.from(document.querySelectorAll('.cat:checked')).map(n=>n.value);
-      const selectedColors = Array.from(document.querySelectorAll('.color:checked')).map(n=>n.value);
-      const maxPrice = Number(priceMax.value);
-
-      const filtered = products.filter(p=>{
-        if (!selectedCats.includes(p.category)) return false;
-        if (selectedColors.length && !selectedColors.includes(p.color)) return false;
-        if (p.price > maxPrice) return false;
-        if (query){
-          return p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
-        }
-        return true;
-      });
-
-      productGrid.innerHTML = '';
-      resultCount.textContent = filtered.length;
-
-      if (filtered.length === 0){
-        productGrid.innerHTML = '<div style="padding:16px;color:var(--muted)">目前沒有符合條件的商品。</div>';
-        return;
-      }
-
-      filtered.forEach(p=>{
-        const card = document.createElement('article');
-        card.className = 'card';
-        card.innerHTML = `
-          <img src="${p.img}" alt="${p.name}">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <h3>${p.name}</h3>
-            <div class="price">NT$${p.price}</div>
-          </div>
-          <div class="meta"><span>${p.category} • ${p.color}</span><span>免運</span></div>
-          <div class="card-actions">
-            <button class="btn btn-outline" data-id="${p.id}" aria-label="查看">查看</button>
-            <button class="btn btn-primary" data-add="${p.id}" aria-label="加入購物車">加入購物車</button>
-          </div>
-        `;
-        productGrid.appendChild(card);
-      });
-    }
-
-    // 加入購物車
-    function addToCart(id){
-      const pid = Number(id);
-      cart[pid] = (cart[pid] || 0) + 1;
-      updateCartUI();
-    }
-
-    function removeFromCart(id){
-      const pid = Number(id);
-      delete cart[pid];
-      updateCartUI();
-    }
-
-    function changeQty(id, qty){
-      const pid = Number(id);
-      if (qty <= 0) { removeFromCart(pid); return; }
-      cart[pid] = qty;
-      updateCartUI();
-    }
-
-    // 更新購物車 UI
-    function updateCartUI(){
-      // 計算數量與價格
-      let totalQty = 0;
-      let totalPrice = 0;
-      cartItemsDiv.innerHTML = '';
-      for (const [idStr, qty] of Object.entries(cart)){
-        const id = Number(idStr);
-        const prod = products.find(p=>p.id===id);
-        if (!prod) continue;
-        totalQty += qty;
-        totalPrice += prod.price * qty;
-
-        const item = document.createElement('div');
-        item.className = 'cart-item';
-        item.innerHTML = `
-          <img src="${prod.img}" alt="${prod.name}">
-          <div style="flex:1">
-            <div style="font-weight:700">${prod.name}</div>
-            <div style="color:var(--muted);font-size:13px">NT$${prod.price} × ${qty}</div>
-            <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
-              <button class="btn btn-outline" data-decrease="${id}">-</button>
-              <input type="number" value="${qty}" min="0" style="width:56px;padding:4px;border-radius:6px;border:1px solid #eee">
-              <button class="btn btn-outline" data-increase="${id}">+</button>
-            </div>
-          </div>
-          <div style="font-weight:800">NT$${prod.price * qty}</div>
-        `;
-        // button handlers later via event delegation
-        const input = item.querySelector('input');
-        input.addEventListener('change', (e)=>{
-          const val = Number(e.target.value) || 0;
-          changeQty(id, val);
-        });
-        cartItemsDiv.appendChild(item);
-      }
-
-      cartCount.textContent = totalQty;
-      cartTotalEl.textContent = `NT$${totalPrice}`;
-
-      if (totalQty === 0){
-        cartItemsDiv.innerHTML = '<div style="color:var(--muted);padding:8px">購物車是空的</div>';
-      }
-    }
-
-    // 事件綁定（委派）
-    document.addEventListener('click', (e)=>{
-      const add = e.target.closest('[data-add]');
-      if (add){
-        addToCart(add.getAttribute('data-add'));
-        // 打開購物車面板提示使用者
-        cartPanel.style.display = 'block';
-        return;
-      }
-      const decrease = e.target.closest('[data-decrease]');
-      if (decrease){
-        const id = decrease.getAttribute('data-decrease');
-        const cur = cart[id] || 0;
-        changeQty(id, cur - 1);
-        return;
-      }
-      const increase = e.target.closest('[data-increase]');
-      if (increase){
-        const id = increase.getAttribute('data-increase');
-        const cur = cart[id] || 0;
-        changeQty(id, cur + 1);
-        return;
-      }
-      if (e.target.id === 'cartBtn' || e.target.closest('#cartBtn')){
-        cartPanel.style.display = cartPanel.style.display === 'block' ? 'none' : 'block';
-        return;
-      }
-      if (e.target.id === 'clearCart'){
-        for (const k of Object.keys(cart)) delete cart[k];
-        updateCartUI();
-        return;
-      }
-      if (e.target.id === 'checkoutBtn'){
-        if (parseInt(cartCount.textContent,10)===0){
-          alert('你的購物車是空的喔！');
-        } else {
-          alert('已前往結帳（示範） — 實際購買請串接後端或付款服務。');
-        }
-        return;
-      }
-      if (e.target.id === 'clearFilters'){
-        document.querySelectorAll('.cat, .color').forEach(cb=>cb.checked=true);
-        priceMax.value = priceMax.max;
-        priceMaxLabel.textContent = `NT$${priceMax.value}`;
-        searchInput.value = '';
-        renderProducts();
-        return;
-      }
-      if (e.target.id === 'toggleFilters'){
-        const aside = document.querySelector('aside');
-        // 在窄螢幕時切換顯示
-        if (window.innerWidth <= 880) {
-          aside.style.display = aside.style.display === 'none' ? 'block' : 'none';
-        } else {
-          // desktop: 滑動 focus 到 sidebar
-          aside.scrollIntoView({behavior:'smooth',block:'center'});
-        }
-        return;
-      }
-      if (e.target.closest('.card') && e.target.matches('.card button') && e.target.getAttribute('data-id')){
-        // View 按鈕（示範 open 詳細）
-        const id = Number(e.target.getAttribute('data-id'));
-        const p = products.find(x=>x.id===id);
-        if (p) alert(`${p.name}\nNT$${p.price}\n分類：${p.category}\n顏色：${p.color}`);
-        return;
-      }
-    });
-
-    // 其他互動
-    searchInput.addEventListener('input', debounce(()=>renderProducts(), 220));
-    priceMax.addEventListener('input', ()=>{
-      priceMaxLabel.textContent = `NT$${priceMax.value}`;
-      renderProducts();
-    });
-    document.querySelectorAll('.cat, .color').forEach(cb=>cb.addEventListener('change', renderProducts));
-
-    // 聯絡表單（示範）
-    document.getElementById('contactForm').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const d = new FormData(e.target);
-      alert(`已收到訊息：\n姓名：${d.get('name')}\nEmail：${d.get('email')}\n\n內容：${d.get('message')}\n\n（示範，未送出到後端）`);
-      e.target.reset();
-    });
-
-    // 小工具：debounce
-    function debounce(fn, wait=200){
-      let t;
-      return function(...args){
-        clearTimeout(t);
-        t = setTimeout(()=>fn.apply(this,args), wait);
-      };
-    }
-
-    // 初次 render
-    renderProducts();
-    updateCartUI();
-
-    // Accessibility: 關閉購物車面板 ESC
-    document.addEventListener('keydown', (e)=>{
-      if (e.key === 'Escape') cartPanel.style.display = 'none';
-    });
-
-    // 簡單持久化（可選）
-    // window.addEventListener('beforeunload', ()=> localStorage.setItem('sampleCart', JSON.stringify(cart)));
-    // const saved = JSON.parse(localStorage.getItem('sampleCart')||'{}');
-    // Object.assign(cart, saved);
-    // updateCartUI();
-
-  </script>
-</body>
-</html>
+    yearEl.textContent = new Date().getFullYear
