@@ -7,10 +7,11 @@
     <style>
         /* CSS 樣式區 */
         :root {
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(255, 255, 255, 0.3);
+            --bg-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); /* 換個稍微粉嫩一點的漸層 */
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
             --text-color: #ffffff;
+            --input-bg: rgba(255, 255, 255, 0.3);
         }
 
         body {
@@ -27,14 +28,14 @@
 
         .weather-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 40px;
-            width: 320px;
+            width: 340px;
             text-align: center;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            box-shadow: 0 10px 40px 0 rgba(31, 38, 135, 0.2);
             transition: transform 0.3s ease;
         }
 
@@ -42,75 +43,79 @@
             transform: translateY(-5px);
         }
 
-        .location {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        /* 下拉選單樣式 */
+        .city-selector {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            background: var(--input-bg);
+            color: #fff; /* 選單文字顏色 */
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            appearance: none; /* 移除預設箭頭 */
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* 為了讓選單內的選項在白底上看得到字，設定 option 顏色 */
+        .city-selector option {
+            background: #fff;
+            color: #333;
         }
 
         .icon {
-            font-size: 5rem;
-            margin: 20px 0;
+            font-size: 5.5rem;
+            margin: 10px 0;
             animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
         }
 
         .temperature {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 700;
             margin: 0;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            line-height: 1;
         }
 
         .unit {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             vertical-align: top;
+            margin-left: 5px;
         }
 
         .description {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-top: 10px;
-            opacity: 0.9;
+            font-weight: 500;
         }
 
         .details {
             display: flex;
             justify-content: space-around;
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            padding-top: 20px;
+            margin-top: 35px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 25px;
         }
 
         .detail-item {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
         }
         
         .detail-value {
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             display: block;
-        }
-
-        .btn-update {
-            margin-top: 25px;
-            background: #fff;
-            color: #764ba2;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .btn-update:hover {
-            background: #f0f0f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-bottom: 4px;
         }
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-12px); }
             100% { transform: translateY(0px); }
         }
     </style>
@@ -118,7 +123,26 @@
 <body>
 
     <div class="weather-card">
-        <div class="location" id="location-text">台北市 (預設)</div>
+        <select id="city-select" class="city-selector" onchange="changeCity()">
+            <option value="25.0330,121.5654" selected>📍 台北市 (Taipei)</option>
+            <option value="25.017,121.4625">📍 新北市 (New Taipei)</option>
+            <option value="24.9936,121.3010">📍 桃園市 (Taoyuan)</option>
+            <option value="24.8039,120.9647">📍 新竹市 (Hsinchu)</option>
+            <option value="24.1477,120.6736">📍 台中市 (Taichung)</option>
+            <option value="22.9997,120.2270">📍 台南市 (Tainan)</option>
+            <option value="22.6163,120.2937">📍 高雄市 (Kaohsiung)</option>
+            <option value="24.7570,121.7530">📍 宜蘭市 (Yilan)</option>
+            <option value="23.9772,121.6047">📍 花蓮市 (Hualien)</option>
+            <option value="22.7583,121.1444">📍 台東市 (Taitung)</option>
+            <option disabled>──────────</option>
+            <option value="35.6895,139.6917">✈️ 東京 (Tokyo)</option>
+            <option value="37.5665,126.9780">✈️ 首爾 (Seoul)</option>
+            <option value="40.7128,-74.0060">✈️ 紐約 (New York)</option>
+            <option value="51.5074,-0.1278">✈️ 倫敦 (London)</option>
+            <option disabled>──────────</option>
+            <option value="gps">📡 定位我的位置</option>
+        </select>
+
         <div class="icon" id="weather-icon">🌤️</div>
         <div class="temperature" id="temp">--<span class="unit">°C</span></div>
         <div class="description" id="weather-desc">載入中...</div>
@@ -126,34 +150,28 @@
         <div class="details">
             <div class="detail-item">
                 <span class="detail-value" id="wind-speed">--</span>
-                風速 (km/h)
+                風速 km/h
             </div>
             <div class="detail-item">
                 <span class="detail-value" id="humidity">--</span>
                 相對濕度
             </div>
         </div>
-
-        <button class="btn-update" onclick="getLocation()">📍 定位我的位置</button>
     </div>
 
     <script>
-        // 預設經緯度 (台北市)
-        let lat = 25.0330;
-        let lon = 121.5654;
-
-        // WMO 天氣代碼對照表 (將數字轉為中文與 Emoji)
+        // 天氣代碼轉換
         function getWeatherStatus(code) {
             const codes = {
                 0: { text: "晴朗", icon: "☀️" },
                 1: { text: "大致晴朗", icon: "🌤️" },
                 2: { text: "多雲", icon: "⛅" },
                 3: { text: "陰天", icon: "☁️" },
-                45: { text: "有霧", icon: "🌫️" },
+                45: { text: "起霧", icon: "🌫️" },
                 48: { text: "霧淞", icon: "🌫️" },
                 51: { text: "毛毛雨", icon: "🌧️" },
                 53: { text: "毛毛雨", icon: "🌧️" },
-                55: { text: "毛毛雨", icon: "🌧️" },
+                55: { text: "持續細雨", icon: "🌧️" },
                 61: { text: "小雨", icon: "☔" },
                 63: { text: "中雨", icon: "☔" },
                 65: { text: "大雨", icon: "☔" },
@@ -162,60 +180,79 @@
                 96: { text: "雷雨", icon: "⛈️" },
                 99: { text: "大雷雨", icon: "⛈️" }
             };
-            return codes[code] || { text: "未知天氣", icon: "❓" };
+            return codes[code] || { text: "未知", icon: "❓" };
         }
 
-        // 獲取天氣數據的函數
-        async function fetchWeather(latitude, longitude, cityName = "台北市") {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=relativehumidity_2m,surface_pressure`;
+        // 抓取天氣資料
+        async function fetchWeather(lat, lon) {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m`;
             
             try {
+                // 顯示載入狀態
+                document.getElementById('weather-desc').innerText = "更新中...";
+                
                 const response = await fetch(url);
                 const data = await response.json();
                 
-                // 更新畫面數據
                 const current = data.current_weather;
                 const status = getWeatherStatus(current.weathercode);
                 
-                // 模擬獲取濕度 (Open-Meteo current_weather 不直接含濕度，這裡取目前小時的估算值)
+                // 取得目前小時的濕度
                 const currentHour = new Date().getHours();
-                const humidity = data.hourly.relativehumidity_2m[currentHour] || 75;
+                const humidity = data.hourly.relativehumidity_2m[currentHour] || 70;
 
+                // 更新介面
                 document.getElementById('temp').innerHTML = `${Math.round(current.temperature)}<span class="unit">°C</span>`;
                 document.getElementById('weather-desc').innerText = status.text;
                 document.getElementById('weather-icon').innerText = status.icon;
                 document.getElementById('wind-speed').innerText = current.windspeed;
                 document.getElementById('humidity').innerText = `${humidity}%`;
-                document.getElementById('location-text').innerText = cityName;
 
             } catch (error) {
-                console.error("天氣數據獲取失敗:", error);
-                document.getElementById('weather-desc').innerText = "數據載入失敗";
+                console.error("Error:", error);
+                document.getElementById('weather-desc').innerText = "連線錯誤";
             }
         }
 
-        // 獲取使用者位置
-        function getLocation() {
-            if (navigator.geolocation) {
-                document.getElementById('location-text').innerText = "定位中...";
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const newLat = position.coords.latitude;
-                        const newLon = position.coords.longitude;
-                        fetchWeather(newLat, newLon, "您目前的位置");
-                    },
-                    (error) => {
-                        alert("無法獲取位置，將顯示預設地點（台北）。");
-                        fetchWeather(lat, lon);
-                    }
-                );
+        // 處理選單改變
+        function changeCity() {
+            const select = document.getElementById('city-select');
+            const value = select.value;
+
+            if (value === "gps") {
+                // 如果選擇定位
+                if (navigator.geolocation) {
+                    select.options[select.selectedIndex].text = "📡 定位中...";
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            select.options[select.selectedIndex].text = "📍 我的位置";
+                            fetchWeather(lat, lon);
+                        },
+                        (error) => {
+                            alert("無法取得位置，請確認瀏覽器權限。");
+                            // 失敗則切回台北
+                            select.value = "25.0330,121.5654";
+                            fetchWeather(25.0330, 121.5654);
+                        }
+                    );
+                } else {
+                    alert("您的瀏覽器不支援定位功能");
+                }
             } else {
-                alert("您的瀏覽器不支援地理定位。");
+                // 一般城市選擇
+                const [lat, lon] = value.split(',');
+                fetchWeather(lat, lon);
             }
         }
 
-        // 網頁載入時自動執行一次 (預設台北)
-        window.onload = () => fetchWeather(lat, lon);
+        // 初始執行 (預設載入選單上第一個位置：台北)
+        window.onload = () => {
+            const select = document.getElementById('city-select');
+            const [lat, lon] = select.value.split(',');
+            fetchWeather(lat, lon);
+        };
     </script>
 </body>
 </html>
