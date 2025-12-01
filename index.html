@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>氣象</title>
+    <title>專屬氣象中控台</title>
     <style>
         :root {
             /* 預設主題：深海藍 */
@@ -146,7 +146,7 @@
     <div class="toolbar">
         <button class="tool-btn" onclick="toggleUnit()">🌡️ °C/°F</button>
         <button class="tool-btn" onclick="showOutfitAdvice()">👗 穿搭建議</button>
-        <button class="tool-btn" onclick="cycleTheme()">🎨 換個心情</button>
+        <button class="tool-btn" onclick="cycleTheme()">🎨 切換主題</button>
     </div>
 
     <div class="header">
@@ -193,9 +193,9 @@
 <div class="modal-overlay" id="advice-modal" onclick="closeModal(event)">
     <div class="modal-content">
         <span class="modal-icon" id="advice-icon">🧣</span>
-        <h2 class="modal-title">公主的穿搭建議</h2>
+        <h2 class="modal-title">今日穿搭建議</h2>
         <p class="modal-text" id="advice-text">正在分析天氣...</p>
-        <button class="close-btn" onclick="document.getElementById('advice-modal').classList.remove('show')">收到！</button>
+        <button class="close-btn" onclick="document.getElementById('advice-modal').classList.remove('show')">好的</button>
     </div>
 </div>
 
@@ -287,16 +287,13 @@
     // 功能 A: 單位切換
     function toggleUnit() {
         isCelsius = !isCelsius;
-        // 重新抓取資料太慢，直接觸發選單改變事件來重新渲染最簡單，但這裡為了流暢，
-        // 我們假設資料已經在變數裡，直接呼叫一次 fetchWeather 太浪費。
-        // 為了簡單起見，這裡直接重新觸發一次目前的城市查詢
         const select = document.getElementById('city-select');
         const [lat, lon] = select.value.split(',');
         if(select.value !== 'gps') fetchWeather(lat, lon);
-        else getLocation(); // 如果是 GPS 模式
+        else getLocation(); 
     }
 
-    // 功能 B: 穿搭建議邏輯
+    // 功能 B: 穿搭建議邏輯 (已修改為中性描述)
     function showOutfitAdvice() {
         const modal = document.getElementById('advice-modal');
         const icon = document.getElementById('advice-icon');
@@ -305,22 +302,20 @@
         let advice = "";
         let emoji = "";
 
-        // 簡單的溫度判斷邏輯
         if (currentTempC < 15) {
             emoji = "🧣";
-            advice = "外面好冷喔！建議穿上厚外套、圍巾，或是多層次穿搭。記得保暖別感冒了！";
+            advice = "外面氣溫較低，建議穿著厚外套、圍巾，或採用多層次穿搭來保暖。";
         } else if (currentTempC < 20) {
             emoji = "🧥";
             advice = "稍微有點涼意，穿件針織衫、帽T或是薄夾克剛剛好。";
         } else if (currentTempC < 26) {
             emoji = "👕";
-            advice = "天氣很舒適！穿短袖配一件薄襯衫，或是舒適的長袖上衣都可以喔。";
+            advice = "天氣舒適，穿短袖配一件薄襯衫，或是舒適的長袖上衣都可以。";
         } else {
             emoji = "🕶️";
             advice = "天氣炎熱，建議穿著透氣的短袖、裙子，記得多補充水分並注意防曬！";
         }
 
-        // 如果下雨
         if ([61, 63, 65, 80, 95].includes(weatherCode)) {
             advice += "<br><br>☔ 另外，外面在下雨，別忘了帶傘！";
         }
