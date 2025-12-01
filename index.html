@@ -1,300 +1,221 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>風格衣著 | Clothing Shop</title>
-  <meta name="description" content="範例衣服店網站 — 展示商品、加入購物車、聯絡表單（單檔案範例）">
-  <style>
-    :root{
-      --max-width:1100px;
-      --accent:#2b7a78;
-      --accent-2:#ff7a59;
-      --muted:#6b6b6b;
-      --card-shadow: 0 6px 20px rgba(35,35,35,0.08);
-      --glass: rgba(255,255,255,0.6);
-      font-family: "Helvetica Neue", Arial, "Noto Sans", system-ui;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      background: linear-gradient(180deg,#f6f6f8, #ffffff);
-      color:#222;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.45;
-      padding:24px;
-      display:flex;
-      justify-content:center;
-    }
-    .container{
-      width:100%;
-      max-width:var(--max-width);
-      margin:0 auto;
-    }
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:20px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      text-decoration:none;
-      color:inherit;
-    }
-    .logo {
-      width:48px;
-      height:48px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));
-      border-radius:10px;
-      display:flex;align-items:center;justify-content:center;
-      color:white;font-weight:700;
-      box-shadow:var(--card-shadow);
-    }
-    nav{display:flex;gap:12px;align-items:center}
-    nav a{color:var(--muted);text-decoration:none;font-weight:500}
-    .actions{display:flex;gap:8px;align-items:center}
-    .search{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      background:white;
-      padding:6px 10px;
-      border-radius:8px;
-      box-shadow:var(--card-shadow);
-    }
-    .search input{
-      border:0;outline:0;font-size:14px;background:transparent;
-      width:180px;
-    }
-    .btn{
-      appearance:none;border:0;padding:8px 12px;border-radius:8px;
-      cursor:pointer;font-weight:600;
-    }
-    .btn-primary{background:var(--accent);color:white}
-    .btn-outline{background:transparent;border:1px solid #ddd}
-    .hero{
-      background:linear-gradient(90deg, rgba(43,122,120,0.06), rgba(255,122,89,0.03));
-      padding:22px;
-      border-radius:12px;
-      margin-bottom:18px;
-      display:flex;
-      gap:18px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .hero-left{max-width:58%}
-    .hero h1{margin:0 0 6px 0;font-size:26px}
-    .hero p{margin:0;color:var(--muted)}
-    .hero-right img{width:180px;border-radius:8px;box-shadow:var(--card-shadow)}
-    .main{
-      display:grid;
-      grid-template-columns:260px 1fr;
-      gap:18px;
-    }
-    aside{
-      background:white;padding:14px;border-radius:12px;box-shadow:var(--card-shadow);
-      height:fit-content;
-    }
-    .filter-group{margin-bottom:12px}
-    .filter-group h4{margin:0 0 8px 0;font-size:14px}
-    .price-range input{width:100%}
-    .products{
-      display:grid;
-      grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
-      gap:16px;
-    }
-    .card{
-      background:white;border-radius:12px;padding:12px;box-shadow:var(--card-shadow);
-      display:flex;flex-direction:column;gap:10px;
-    }
-    .card img{width:100%;height:200px;object-fit:cover;border-radius:8px}
-    .card h3{margin:0;font-size:16px}
-    .meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
-    .price{font-weight:700;color:var(--accent)}
-    .card .card-actions{display:flex;gap:8px;margin-top:auto;align-items:center}
-    .cart-btn{
-      position:fixed;
-      right:22px;
-      bottom:22px;
-      z-index:1200;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      background:var(--accent);
-      color:white;padding:12px 14px;border-radius:999px;box-shadow:0 10px 30px rgba(43,122,120,0.18);
-      cursor:pointer;
-    }
-    .cart-panel{
-      position:fixed;
-      right:22px;
-      bottom:80px;
-      width:340px;
-      max-height:70vh;
-      overflow:auto;
-      background:white;border-radius:12px;padding:12px;box-shadow:0 18px 50px rgba(20,20,20,0.18);
-      z-index:1200;
-      transform-origin:bottom right;
-      display:none;
-    }
-    .cart-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed #eee}
-    .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:6px}
-    .cart-summary{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-    footer{margin-top:20px;color:var(--muted);font-size:14px;text-align:center;padding:18px}
-    @media (max-width:880px){
-      .main{grid-template-columns:1fr}
-      .hero-right{display:none}
-      .search input{width:120px}
-      aside{order:2}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>即時天氣面板</title>
+    <style>
+        /* CSS 樣式區 */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+        }
+
+        .weather-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            transition: transform 0.3s ease;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .location {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .temperature {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .unit {
+            font-size: 1.5rem;
+            vertical-align: top;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
+        }
+
+        .detail-item {
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: block;
+        }
+
+        .btn-update {
+            margin-top: 25px;
+            background: #fff;
+            color: #764ba2;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn-update:hover {
+            background: #f0f0f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
 </head>
 <body>
-  <div class="container" role="main">
-    <header>
-      <a class="brand" href="#" aria-label="風格衣著首頁">
-        <div class="logo">FW</div>
-        <div>
-          <div style="font-weight:700">風格衣著</div>
-          <div style="font-size:12px;color:var(--muted)">簡約・日常・質感</div>
-        </div>
-      </a>
-      <nav aria-label="主選單">
-        <a href="#products">商品</a>
-        <a href="#about">關於我們</a>
-        <a href="#contact">聯絡</a>
-      </nav>
-      <div class="actions">
-        <div class="search" role="search">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle></svg>
-          <input id="searchInput" type="search" placeholder="搜尋商品或關鍵字..." />
-        </div>
-        <button class="btn btn-outline" id="toggleFilters" title="顯示篩選">篩選</button>
-        <button class="btn btn-primary" id="signInBtn">登入</button>
-      </div>
-    </header>
-    <section class="hero" aria-label="特色商品">
-      <div class="hero-left">
-        <h1>秋季新品上架 — 輕盈與溫暖兼具</h1>
-        <p>我們精選舒適材質與多功能設計，從上學走到約會都適合。限時免運、七日無理由退貨。</p>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <a class="btn btn-primary" href="#products">立即購物</a>
-          <a class="btn btn-outline" href="#about">了解我們</a>
-        </div>
-      </div>
-      <div class="hero-right">
-        <img src="https://images.unsplash.com/photo-1584466977773-1f7c66ff84c8?auto=format&fit=crop&w=400&q=80" alt="店內新品示意">
-      </div>
-    </section>
-    <div class="main">
-      <aside aria-label="篩選欄">
-        <div class="filter-group">
-          <h4>分類</h4>
-          <label><input type="checkbox" class="cat" value="T-Shirt" checked> T-Shirt</label><br/>
-          <label><input type="checkbox" class="cat" value="外套" checked> 外套</label><br/>
-          <label><input type="checkbox" class="cat" value="連身裙" checked> 連身裙</label><br/>
-          <label><input type="checkbox" class="cat" value="褲裝" checked> 褲裝</label>
-        </div>
-        <div class="filter-group">
-          <h4>價格範圍</h4>
-          <div class="price-range">
-            <input id="priceMax" type="range" min="200" max="6000" step="50" value="6000">
-            <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted)">
-              <span>NT$200</span><span id="priceMaxLabel">NT$6000</span>
+
+    <div class="weather-card">
+        <div class="location" id="location-text">台北市 (預設)</div>
+        <div class="icon" id="weather-icon">🌤️</div>
+        <div class="temperature" id="temp">--<span class="unit">°C</span></div>
+        <div class="description" id="weather-desc">載入中...</div>
+
+        <div class="details">
+            <div class="detail-item">
+                <span class="detail-value" id="wind-speed">--</span>
+                風速 (km/h)
             </div>
-          </div>
+            <div class="detail-item">
+                <span class="detail-value" id="humidity">--</span>
+                相對濕度
+            </div>
         </div>
-        <div class="filter-group">
-          <h4>顏色</h4>
-          <label><input type="checkbox" class="color" value="黑"> 黑</label><br/>
-          <label><input type="checkbox" class="color" value="白"> 白</label><br/>
-          <label><input type="checkbox" class="color" value="米"> 米</label><br/>
-          <label><input type="checkbox" class="color" value="藍"> 藍</label>
-        </div>
-        <div style="margin-top:12px">
-          <button id="clearFilters" class="btn btn-outline" style="width:100%">清除篩選</button>
-        </div>
-      </aside>
-      <section>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <h2 id="products">商品</h2>
-          <div style="color:var(--muted)"><span id="resultCount">0</span> 筆結果</div>
-        </div>
-        <div class="products" id="productGrid" aria-live="polite"></div>
-        <section id="about" style="margin-top:22px;background:white;padding:14px;border-radius:12px;box-shadow:var(--card-shadow)">
-          <h3>關於我們</h3>
-          <p style="color:var(--muted)">風格衣著成立於 2024 年，致力於提供平價但用心的服飾。我們關注材質、版型與實穿性。</p>
-        </section>
-        <section id="contact" style="margin-top:12px">
-          <div style="background:white;padding:14px;border-radius:12px;box-shadow:var(--card-shadow);margin-top:12px">
-            <h3>聯絡我們</h3>
-            <form id="contactForm">
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <input name="name" placeholder="姓名" required style="flex:1;padding:8px;border-radius:8px;border:1px solid #eee">
-                <input name="email" placeholder="電子郵件" type="email" required style="flex:1;padding:8px;border-radius:8px;border:1px solid #eee">
-              </div>
-              <div style="margin-top:8px">
-                <textarea name="message" placeholder="訊息" required style="width:100%;min-height:80px;padding:8px;border-radius:8px;border:1px solid #eee"></textarea>
-              </div>
-              <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end">
-                <button type="submit" class="btn btn-primary">送出</button>
-                <button type="reset" class="btn btn-outline">重填</button>
-              </div>
-            </form>
-          </div>
-        </section>
-      </section>
-    </div>
-    <footer>
-      © <span id="year"></span> 風格衣著 — 範例展示頁面。圖片為示意圖。
-    </footer>
-    <div class="cart-btn" id="cartBtn" aria-label="購物車">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1" fill="white"/><circle cx="18" cy="20" r="1" fill="white"/></svg>
-      <div id="cartCount">0</div>
-    </div>
-    <aside class="cart-panel" id="cartPanel" aria-label="購物車清單">
-      <h3>購物車</h3>
-      <div id="cartItems"></div>
-      <div class="cart-summary">
-        <div>總計</div>
-        <div style="font-weight:800" id="cartTotal">NT$0</div>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button id="checkoutBtn" class="btn btn-primary" style="flex:1">結帳</button>
-        <button id="clearCart" class="btn btn-outline">清空</button>
-      </div>
-    </aside>
-  </div>
 
-  <script>
-    const products = [
-      {id:1,name:"舒適純棉T-Shirt",price:690,category:"T-Shirt",color:"白",img:"https://images.unsplash.com/photo-1584466977773-1f7c66ff84c8?auto=format&fit=crop&w=600&q=80"},
-      {id:2,name:"經典牛仔外套",price:2580,category:"外套",color:"藍",img:"https://images.unsplash.com/photo-1593032465175-9042e3386f63?auto=format&fit=crop&w=600&q=80"},
-      {id:3,name:"高腰寬褲",price:980,category:"褲裝",color:"黑",img:"https://images.unsplash.com/photo-1628532470963-b88b44f72d5b?auto=format&fit=crop&w=600&q=80"},
-      {id:4,name:"輕薄風衣",price:1980,category:"外套",color:"米",img:"https://images.unsplash.com/photo-1593032465250-bfaee54f4304?auto=format&fit=crop&w=600&q=80"},
-      {id:5,name:"夏日連身裙",price:1280,category:"連身裙",color:"白",img:"https://images.unsplash.com/photo-1564468781199-3129a51b488c?auto=format&fit=crop&w=600&q=80"},
-      {id:6,name:"印花短TEE",price:520,category:"T-Shirt",color:"黑",img:"https://images.unsplash.com/photo-1600180758893-89b89cf26d80?auto=format&fit=crop&w=600&q=80"},
-      {id:7,name:"針織毛衣",price:1450,category:"外套",color:"藍",img:"https://images.unsplash.com/photo-1602810316315-8b5b35d5f988?auto=format&fit=crop&w=600&q=80"},
-      {id:8,name:"休閒運動褲",price:760,category:"褲裝",color:"黑",img:"https://images.unsplash.com/photo-1600180758951-ec6fc2baf62c?auto=format&fit=crop&w=600&q=80"}
-    ];
+        <button class="btn-update" onclick="getLocation()">📍 定位我的位置</button>
+    </div>
 
-    const productGrid = document.getElementById('productGrid');
-    const resultCount = document.getElementById('resultCount');
-    const searchInput = document.getElementById('searchInput');
-    const priceMax = document.getElementById('priceMax');
-    const priceMaxLabel = document.getElementById('priceMaxLabel');
-    const cartBtn = document.getElementById('cartBtn');
-    const cartPanel = document.getElementById('cartPanel');
-    const cartItemsDiv = document.getElementById('cartItems');
-    const cartCount = document.getElementById('cartCount');
-    const cartTotalEl = document.getElementById('cartTotal');
-    const clearFiltersBtn = document.getElementById('clearFilters');
-    const toggleFiltersBtn = document.getElementById('toggleFilters');
-    const yearEl = document.getElementById('year');
-    const cart = {};
-    yearEl.textContent = new Date().getFullYear
+    <script>
+        // 預設經緯度 (台北市)
+        let lat = 25.0330;
+        let lon = 121.5654;
+
+        // WMO 天氣代碼對照表 (將數字轉為中文與 Emoji)
+        function getWeatherStatus(code) {
+            const codes = {
+                0: { text: "晴朗", icon: "☀️" },
+                1: { text: "大致晴朗", icon: "🌤️" },
+                2: { text: "多雲", icon: "⛅" },
+                3: { text: "陰天", icon: "☁️" },
+                45: { text: "有霧", icon: "🌫️" },
+                48: { text: "霧淞", icon: "🌫️" },
+                51: { text: "毛毛雨", icon: "🌧️" },
+                53: { text: "毛毛雨", icon: "🌧️" },
+                55: { text: "毛毛雨", icon: "🌧️" },
+                61: { text: "小雨", icon: "☔" },
+                63: { text: "中雨", icon: "☔" },
+                65: { text: "大雨", icon: "☔" },
+                80: { text: "陣雨", icon: "🌧️" },
+                95: { text: "雷雨", icon: "⚡" },
+                96: { text: "雷雨", icon: "⛈️" },
+                99: { text: "大雷雨", icon: "⛈️" }
+            };
+            return codes[code] || { text: "未知天氣", icon: "❓" };
+        }
+
+        // 獲取天氣數據的函數
+        async function fetchWeather(latitude, longitude, cityName = "台北市") {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=relativehumidity_2m,surface_pressure`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                // 更新畫面數據
+                const current = data.current_weather;
+                const status = getWeatherStatus(current.weathercode);
+                
+                // 模擬獲取濕度 (Open-Meteo current_weather 不直接含濕度，這裡取目前小時的估算值)
+                const currentHour = new Date().getHours();
+                const humidity = data.hourly.relativehumidity_2m[currentHour] || 75;
+
+                document.getElementById('temp').innerHTML = `${Math.round(current.temperature)}<span class="unit">°C</span>`;
+                document.getElementById('weather-desc').innerText = status.text;
+                document.getElementById('weather-icon').innerText = status.icon;
+                document.getElementById('wind-speed').innerText = current.windspeed;
+                document.getElementById('humidity').innerText = `${humidity}%`;
+                document.getElementById('location-text').innerText = cityName;
+
+            } catch (error) {
+                console.error("天氣數據獲取失敗:", error);
+                document.getElementById('weather-desc').innerText = "數據載入失敗";
+            }
+        }
+
+        // 獲取使用者位置
+        function getLocation() {
+            if (navigator.geolocation) {
+                document.getElementById('location-text').innerText = "定位中...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const newLat = position.coords.latitude;
+                        const newLon = position.coords.longitude;
+                        fetchWeather(newLat, newLon, "您目前的位置");
+                    },
+                    (error) => {
+                        alert("無法獲取位置，將顯示預設地點（台北）。");
+                        fetchWeather(lat, lon);
+                    }
+                );
+            } else {
+                alert("您的瀏覽器不支援地理定位。");
+            }
+        }
+
+        // 網頁載入時自動執行一次 (預設台北)
+        window.onload = () => fetchWeather(lat, lon);
+    </script>
+</body>
+</html>
