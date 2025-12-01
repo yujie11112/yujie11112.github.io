@@ -3,256 +3,417 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>即時天氣面板</title>
+    <title>專業氣象儀表板</title>
     <style>
-        /* CSS 樣式區 */
         :root {
-            --bg-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); /* 換個稍微粉嫩一點的漸層 */
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --text-color: #ffffff;
-            --input-bg: rgba(255, 255, 255, 0.3);
+            --bg-gradient: linear-gradient(160deg, #1b2e4b 0%, #243b55 50%, #141E30 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent: #facc15; /* 黃色點綴 */
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            padding: 0;
-            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: var(--bg-gradient);
-            height: 100vh;
+            color: var(--text-primary);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            color: var(--text-color);
+            align-items: flex-start; /* 改為靠上對齊，適應長內容 */
         }
 
-        .weather-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            width: 340px;
-            text-align: center;
-            box-shadow: 0 10px 40px 0 rgba(31, 38, 135, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .weather-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* 下拉選單樣式 */
-        .city-selector {
+        /* 主容器：限制最大寬度，像手機 App */
+        .dashboard {
             width: 100%;
-            padding: 12px;
+            max-width: 480px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* 頂部選單與時間 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-            background: var(--input-bg);
-            color: #fff; /* 選單文字顏色 */
+        }
+
+        .city-select {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 12px;
             font-size: 1rem;
+            font-weight: 600;
             outline: none;
             cursor: pointer;
-            appearance: none; /* 移除預設箭頭 */
+        }
+
+        .city-select option {
+            background: #243b55;
+            color: #fff;
+        }
+
+        .current-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* 核心天氣區塊 (大字) */
+        .hero-weather {
             text-align: center;
-            font-weight: bold;
+            padding: 20px 0;
         }
 
-        /* 為了讓選單內的選項在白底上看得到字，設定 option 顏色 */
-        .city-selector option {
-            background: #fff;
-            color: #333;
-        }
-
-        .icon {
+        .hero-temp {
             font-size: 5.5rem;
-            margin: 10px 0;
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
-        }
-
-        .temperature {
-            font-size: 4.5rem;
-            font-weight: 700;
-            margin: 0;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            font-weight: 200;
             line-height: 1;
+            letter-spacing: -2px;
         }
 
-        .unit {
-            font-size: 1.8rem;
-            vertical-align: top;
-            margin-left: 5px;
-        }
-
-        .description {
-            font-size: 1.3rem;
-            margin-top: 10px;
+        .hero-desc {
+            font-size: 1.5rem;
             font-weight: 500;
-        }
-
-        .details {
+            margin-top: 5px;
             display: flex;
-            justify-content: space-around;
-            margin-top: 35px;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 25px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .detail-item {
+        .hero-hl {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* 24小時橫向捲軸 */
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin: 25px 0 10px 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hourly-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 10px;
+            /* 隱藏捲軸 */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        .hourly-scroll::-webkit-scrollbar { 
+            display: none; 
+        }
+
+        .hour-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 15px 10px;
+            min-width: 70px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .hour-time { font-size: 0.85rem; margin-bottom: 8px; color: var(--text-secondary); }
+        .hour-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .hour-temp { font-weight: bold; }
+
+        /* 未來預報列表 */
+        .daily-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .day-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .day-name { width: 60px; font-weight: 600; }
+        .day-icon { width: 40px; text-align: center; }
+        .day-temp-bar { 
+            display: flex; 
+            gap: 10px; 
+            color: var(--text-secondary);
             font-size: 0.95rem;
-            opacity: 0.9;
         }
-        
-        .detail-value {
-            font-weight: bold;
-            font-size: 1.2rem;
-            display: block;
-            margin-bottom: 4px;
+        .temp-high { color: #fff; font-weight: 600; }
+
+        /* 詳細資訊網格 */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-            100% { transform: translateY(0px); }
+        .detail-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid var(--card-border);
         }
+
+        .detail-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .detail-sub {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        /* 載入動畫 */
+        .loading { opacity: 0.5; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <div class="weather-card">
-        <select id="city-select" class="city-selector" onchange="changeCity()">
-            <option value="25.0330,121.5654" selected>📍 台北市 (Taipei)</option>
-            <option value="25.017,121.4625">📍 新北市 (New Taipei)</option>
-            <option value="24.9936,121.3010">📍 桃園市 (Taoyuan)</option>
-            <option value="24.8039,120.9647">📍 新竹市 (Hsinchu)</option>
-            <option value="24.1477,120.6736">📍 台中市 (Taichung)</option>
-            <option value="22.9997,120.2270">📍 台南市 (Tainan)</option>
-            <option value="22.6163,120.2937">📍 高雄市 (Kaohsiung)</option>
-            <option value="24.7570,121.7530">📍 宜蘭市 (Yilan)</option>
-            <option value="23.9772,121.6047">📍 花蓮市 (Hualien)</option>
-            <option value="22.7583,121.1444">📍 台東市 (Taitung)</option>
-            <option disabled>──────────</option>
-            <option value="35.6895,139.6917">✈️ 東京 (Tokyo)</option>
-            <option value="37.5665,126.9780">✈️ 首爾 (Seoul)</option>
-            <option value="40.7128,-74.0060">✈️ 紐約 (New York)</option>
-            <option value="51.5074,-0.1278">✈️ 倫敦 (London)</option>
-            <option disabled>──────────</option>
-            <option value="gps">📡 定位我的位置</option>
+<div class="dashboard" id="main-dash">
+    <div class="header">
+        <select id="city-select" class="city-select" onchange="changeCity()">
+            <option value="25.0330,121.5654" selected>📍 台北市</option>
+            <option value="24.1477,120.6736">📍 台中市</option>
+            <option value="22.6163,120.2937">📍 高雄市</option>
+            <option value="24.8039,120.9647">📍 新竹市</option>
+            <option value="22.9997,120.2270">📍 台南市</option>
+            <option value="23.9772,121.6047">📍 花蓮市</option>
+            <option disabled>──────</option>
+            <option value="35.6895,139.6917">🇯🇵 東京</option>
+            <option value="37.5665,126.9780">🇰🇷 首爾</option>
+            <option value="51.5074,-0.1278">🇬🇧 倫敦</option>
+            <option value="40.7128,-74.0060">🇺🇸 紐約</option>
+            <option disabled>──────</option>
+            <option value="gps">📡 我的位置</option>
         </select>
+        <div class="current-date" id="date-display">--月--日</div>
+    </div>
 
-        <div class="icon" id="weather-icon">🌤️</div>
-        <div class="temperature" id="temp">--<span class="unit">°C</span></div>
-        <div class="description" id="weather-desc">載入中...</div>
-
-        <div class="details">
-            <div class="detail-item">
-                <span class="detail-value" id="wind-speed">--</span>
-                風速 km/h
-            </div>
-            <div class="detail-item">
-                <span class="detail-value" id="humidity">--</span>
-                相對濕度
-            </div>
+    <div class="hero-weather">
+        <div class="hero-desc">
+            <span id="hero-icon">🌤️</span> 
+            <span id="hero-text">--</span>
+        </div>
+        <div class="hero-temp" id="hero-temp">--°</div>
+        <div class="hero-hl">
+            最高 <span id="today-high">--</span>° 
+            最低 <span id="today-low">--</span>°
         </div>
     </div>
 
-    <script>
-        // 天氣代碼轉換
-        function getWeatherStatus(code) {
-            const codes = {
-                0: { text: "晴朗", icon: "☀️" },
-                1: { text: "大致晴朗", icon: "🌤️" },
-                2: { text: "多雲", icon: "⛅" },
-                3: { text: "陰天", icon: "☁️" },
-                45: { text: "起霧", icon: "🌫️" },
-                48: { text: "霧淞", icon: "🌫️" },
-                51: { text: "毛毛雨", icon: "🌧️" },
-                53: { text: "毛毛雨", icon: "🌧️" },
-                55: { text: "持續細雨", icon: "🌧️" },
-                61: { text: "小雨", icon: "☔" },
-                63: { text: "中雨", icon: "☔" },
-                65: { text: "大雨", icon: "☔" },
-                80: { text: "陣雨", icon: "🌧️" },
-                95: { text: "雷雨", icon: "⚡" },
-                96: { text: "雷雨", icon: "⛈️" },
-                99: { text: "大雷雨", icon: "⛈️" }
-            };
-            return codes[code] || { text: "未知", icon: "❓" };
-        }
+    <div class="section-title">⏰ 24小時預報 (往左滑動)</div>
+    <div class="hourly-scroll" id="hourly-container">
+        </div>
 
-        // 抓取天氣資料
-        async function fetchWeather(lat, lon) {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m`;
+    <div class="section-title">📅 未來 7 天</div>
+    <div class="daily-list" id="daily-container">
+        </div>
+
+    <div class="section-title">📊 詳細數據</div>
+    <div class="details-grid">
+        <div class="detail-card">
+            <div class="detail-title">體感溫度</div>
+            <div class="detail-value" id="detail-feels">--°</div>
+            <div class="detail-sub">實際感受</div>
+        </div>
+        <div class="detail-card">
+            <div class="detail-title">濕度</div>
+            <div class="detail-value" id="detail-humidity">--%</div>
+            <div class="detail-sub">露點 --°</div>
+        </div>
+        <div class="detail-card">
+            <div class="detail-title">風速</div>
+            <div class="detail-value" id="detail-wind">--</div>
+            <div class="detail-sub">km/h</div>
+        </div>
+        <div class="detail-card">
+            <div class="detail-title">日出/日落</div>
+            <div class="detail-value" style="font-size: 1.2rem;" id="detail-sun">--:--</div>
+            <div class="detail-sub">日落時間</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 天氣代碼表
+    const weatherMap = {
+        0: { t: "晴朗", i: "☀️" }, 1: { t: "多雲", i: "🌤️" }, 2: { t: "多雲", i: "⛅" },
+        3: { t: "陰天", i: "☁️" }, 45: { t: "霧", i: "🌫️" }, 51: { t: "毛毛雨", i: "🌧️" },
+        53: { t: "細雨", i: "🌧️" }, 61: { t: "小雨", i: "☔" }, 63: { t: "中雨", i: "☔" },
+        65: { t: "大雨", i: "⛈️" }, 80: { t: "陣雨", i: "🌦️" }, 95: { t: "雷雨", i: "⚡" }
+    };
+
+    function getW(code) { return weatherMap[code] || { t: "未知", i: "❓" }; }
+    
+    // 更新時間
+    function updateTime() {
+        const now = new Date();
+        const options = { month: 'long', day: 'numeric', weekday: 'short', hour: '2-digit', minute: '2-digit' };
+        document.getElementById('date-display').innerText = now.toLocaleDateString('zh-TW', options);
+    }
+    setInterval(updateTime, 60000);
+    updateTime();
+
+    // 抓取數據
+    async function fetchWeather(lat, lon) {
+        const dash = document.getElementById('main-dash');
+        dash.classList.add('loading');
+
+        // 請求 URL：包含目前天氣、每小時預報、每日預報
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=auto`;
+
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            renderData(data);
+        } catch (e) {
+            console.error(e);
+            alert("資料載入失敗，請檢查網路");
+        } finally {
+            dash.classList.remove('loading');
+        }
+    }
+
+    function renderData(data) {
+        const current = data.current;
+        const daily = data.daily;
+        const hourly = data.hourly;
+        const wInfo = getW(current.weather_code);
+
+        // 1. Hero Section
+        document.getElementById('hero-temp').innerText = Math.round(current.temperature_2m) + "°";
+        document.getElementById('hero-text').innerText = wInfo.t;
+        document.getElementById('hero-icon').innerText = wInfo.i;
+        document.getElementById('today-high').innerText = Math.round(daily.temperature_2m_max[0]);
+        document.getElementById('today-low').innerText = Math.round(daily.temperature_2m_min[0]);
+
+        // 2. Hourly Scroll (Next 24 Hours)
+        const hourlyContainer = document.getElementById('hourly-container');
+        hourlyContainer.innerHTML = '';
+        
+        // 找出目前小時的 index
+        const nowHour = new Date().getHours();
+        
+        // 顯示未來 24 小時
+        for(let i = nowHour; i < nowHour + 24; i++) {
+            if(!hourly.time[i]) break;
+            const timeStr = new Date(hourly.time[i]).getHours() + ":00";
+            const code = hourly.weather_code[i];
+            const temp = Math.round(hourly.temperature_2m[i]);
             
-            try {
-                // 顯示載入狀態
-                document.getElementById('weather-desc').innerText = "更新中...";
-                
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                const current = data.current_weather;
-                const status = getWeatherStatus(current.weathercode);
-                
-                // 取得目前小時的濕度
-                const currentHour = new Date().getHours();
-                const humidity = data.hourly.relativehumidity_2m[currentHour] || 70;
-
-                // 更新介面
-                document.getElementById('temp').innerHTML = `${Math.round(current.temperature)}<span class="unit">°C</span>`;
-                document.getElementById('weather-desc').innerText = status.text;
-                document.getElementById('weather-icon').innerText = status.icon;
-                document.getElementById('wind-speed').innerText = current.windspeed;
-                document.getElementById('humidity').innerText = `${humidity}%`;
-
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('weather-desc').innerText = "連線錯誤";
-            }
+            const div = document.createElement('div');
+            div.className = 'hour-item';
+            div.innerHTML = `
+                <div class="hour-time">${i === nowHour ? '現在' : timeStr}</div>
+                <div class="hour-icon">${getW(code).i}</div>
+                <div class="hour-temp">${temp}°</div>
+            `;
+            hourlyContainer.appendChild(div);
         }
 
-        // 處理選單改變
-        function changeCity() {
-            const select = document.getElementById('city-select');
-            const value = select.value;
+        // 3. Daily Forecast (7 Days)
+        const dailyContainer = document.getElementById('daily-container');
+        dailyContainer.innerHTML = '';
+        
+        for(let i = 0; i < 7; i++) {
+            const date = new Date(daily.time[i]);
+            const dayName = i === 0 ? "今天" : date.toLocaleDateString('zh-TW', { weekday: 'long' }).replace('星期', '週');
+            const code = daily.weather_code[i];
+            const max = Math.round(daily.temperature_2m_max[i]);
+            const min = Math.round(daily.temperature_2m_min[i]);
 
-            if (value === "gps") {
-                // 如果選擇定位
-                if (navigator.geolocation) {
-                    select.options[select.selectedIndex].text = "📡 定位中...";
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const lat = position.coords.latitude;
-                            const lon = position.coords.longitude;
-                            select.options[select.selectedIndex].text = "📍 我的位置";
-                            fetchWeather(lat, lon);
-                        },
-                        (error) => {
-                            alert("無法取得位置，請確認瀏覽器權限。");
-                            // 失敗則切回台北
-                            select.value = "25.0330,121.5654";
-                            fetchWeather(25.0330, 121.5654);
-                        }
-                    );
-                } else {
-                    alert("您的瀏覽器不支援定位功能");
-                }
-            } else {
-                // 一般城市選擇
-                const [lat, lon] = value.split(',');
-                fetchWeather(lat, lon);
-            }
+            const row = document.createElement('div');
+            row.className = 'day-row';
+            row.innerHTML = `
+                <div class="day-name">${dayName}</div>
+                <div class="day-icon">${getW(code).i}</div>
+                <div class="day-temp-bar">
+                    <span>${min}°</span>
+                    <span style="opacity:0.3">/</span>
+                    <span class="temp-high">${max}°</span>
+                </div>
+            `;
+            dailyContainer.appendChild(row);
         }
 
-        // 初始執行 (預設載入選單上第一個位置：台北)
-        window.onload = () => {
-            const select = document.getElementById('city-select');
-            const [lat, lon] = select.value.split(',');
+        // 4. Details Grid
+        document.getElementById('detail-feels').innerText = Math.round(current.apparent_temperature) + "°";
+        document.getElementById('detail-humidity').innerText = current.relative_humidity_2m + "%";
+        document.getElementById('detail-wind').innerText = current.wind_speed_10m;
+        
+        // 處理日落時間
+        const sunsetTime = new Date(daily.sunset[0]);
+        const sunsetStr = sunsetTime.toLocaleTimeString('zh-TW', {hour: '2-digit', minute:'2-digit', hour12: false});
+        document.getElementById('detail-sun').innerText = sunsetStr;
+    }
+
+    // 城市切換與定位
+    function changeCity() {
+        const select = document.getElementById('city-select');
+        const val = select.value;
+
+        if(val === 'gps') {
+            if(navigator.geolocation) {
+                select.options[select.selectedIndex].text = "📡 定位中...";
+                navigator.geolocation.getCurrentPosition(pos => {
+                    select.options[select.selectedIndex].text = "📍 我的位置";
+                    fetchWeather(pos.coords.latitude, pos.coords.longitude);
+                }, () => {
+                    alert("定位失敗");
+                    select.value = "25.0330,121.5654"; // 回台北
+                    fetchWeather(25.0330, 121.5654);
+                });
+            }
+        } else {
+            const [lat, lon] = val.split(',');
             fetchWeather(lat, lon);
-        };
-    </script>
+        }
+    }
+
+    // 初始載入
+    window.onload = () => {
+        const [lat, lon] = document.getElementById('city-select').value.split(',');
+        fetchWeather(lat, lon);
+    };
+
+</script>
+
 </body>
 </html>
